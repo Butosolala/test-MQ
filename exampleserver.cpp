@@ -14,42 +14,8 @@ void start() {
   std::string command = "./Prog ";
   boost::process::ipstream is;
   boost::process::child c(command.c_str(), boost::process::std_out > is);
-  std::string messageQueueName = std::to_string(c.id());
 
-  std::cout << "Server: messageQueueName = " << messageQueueName.c_str() << std::endl;
   c.detach();
-  boost::interprocess::message_queue::remove(messageQueueName.c_str());
-    try
-    {
-      
-      boost::interprocess::message_queue mq(
-          boost::interprocess::create_only,
-          messageQueueName.c_str(), 100, 1000);//
-      boost::interprocess::message_queue::size_type recvd_size;
-      unsigned int priority;
-
-      info me;
-
-      std::stringstream iss;
-      std::string serialized_string;
-      serialized_string.resize(1000);
-      mq.receive(&serialized_string[0], 1000, recvd_size, priority);
-
-      iss << serialized_string;
-
-      boost::archive::text_iarchive ia(iss);
-
-      ia >> me;
-      std::cout << me.id << std::endl;
-      std::cout << me.name << std::endl;
-    }
-    catch (boost::interprocess::interprocess_exception &e)
-    {
-      boost::interprocess::message_queue::remove(messageQueueName.c_str());
-      std::cerr << "server exception: " << e.what() << '\n';
-    }
-    
-  boost::interprocess::message_queue::remove(messageQueueName.c_str());
 
   std::string line;
   while (std::getline(is, line))
