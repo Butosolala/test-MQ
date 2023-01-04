@@ -28,7 +28,7 @@ void start() {
       boost::interprocess::message_queue::size_type recvd_size;
       unsigned int priority;
 
-      info me;
+      info message;
 
       std::stringstream iss;
       std::string serialized_string;
@@ -39,9 +39,9 @@ void start() {
 
       boost::archive::text_iarchive ia(iss);
 
-      ia >> me;
-      std::cout << me.id << std::endl;
-      std::cout << me.name << std::endl;
+      ia >> message;
+      std::cout << message.number << std::endl;
+      std::cout << message.text << std::endl;
     }
     catch (boost::interprocess::interprocess_exception &e)
     {

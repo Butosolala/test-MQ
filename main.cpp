@@ -20,11 +20,11 @@ int main(int argc, char *argv[])
 			messageQueueName.c_str());
 
 		sleep(3);
-		info me(1, "TRANS READY");
+		info message(1, "TRANS READY");
 		std::stringstream oss;
 
 		boost::archive::text_oarchive oa(oss);
-		oa << me;
+		oa << message;
 
 		std::string serialized_string(oss.str());
 		mq.send(serialized_string.data(), serialized_string.size(), 0);

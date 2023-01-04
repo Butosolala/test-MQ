@@ -6,11 +6,11 @@ class info
 {
     public:
         info (int i = 0, std::string n = "")
-            : id(i), name(n)
+            : number(i), text(n)
         {};
 
-        int id;
-        std::string name;
+        int number;
+        std::string text;
 
     private:
         friend class boost::serialization::access;
@@ -18,7 +18,7 @@ class info
         template<class Archive>
             void serialize(Archive & ar, const unsigned int version)
             {  
-                ar & id;
-                ar & name;
+                ar & number;
+                ar & text;
             }
 };
