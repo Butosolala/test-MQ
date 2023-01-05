@@ -6,17 +6,12 @@
 #include <stdlib.h>
 #include <string>
 #include <boost/process.hpp>
+#include <boost/thread.hpp>
 #include "message.hpp"
 
+boost::process::ipstream is;
 
-
-void start() {
-  std::string command = "./Prog ";
-  boost::process::ipstream is;
-  boost::process::child c(command.c_str(), boost::process::std_out > is);
-
-  c.detach();
-
+void parseProg (){
   std::string line;
   while (std::getline(is, line))
   {
@@ -26,6 +21,16 @@ void start() {
       break;
     }
   }
+}
+
+void start() {
+  std::string command = "./Prog ";
+  
+  boost::process::child c(command.c_str(), boost::process::std_out > is);
+  boost::thread parser(&parseProg);
+
+  c.detach();
+  parser.detach();
 }
 
 int main()
