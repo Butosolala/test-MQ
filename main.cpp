@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
 	printf("test main RUNNING\n");
-	sleep(3);
+	sleep(5);
 	printf("END test main\n");
 	return 0;
 }
