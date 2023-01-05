@@ -9,7 +9,18 @@
 #include <boost/thread.hpp>
 #include "message.hpp"
 
-boost::process::ipstream is;
+class Server{
+
+public:
+void start() {
+  std::string command = "./Prog ";
+  boost::thread parser(&Server::parseProg, this);
+  boost::process::child c(command.c_str(), boost::process::std_out > is);
+  c.detach();
+  parser.detach();
+}
+
+private:
 
 void parseProg (){
   std::string line;
@@ -23,15 +34,8 @@ void parseProg (){
   }
 }
 
-void start() {
-  std::string command = "./Prog ";
-  
-  boost::process::child c(command.c_str(), boost::process::std_out > is);
-  boost::thread parser(&parseProg);
-
-  c.detach();
-  parser.detach();
-}
+boost::process::ipstream is;
+};
 
 int main()
 {
@@ -43,12 +47,11 @@ int main()
 
         if (command == "0" || command == "start")
         {
-            std::cout << "start" << std::endl;
-            start();
+            Server Server;
+            Server.start();
         }
         else if (command == "1" || command == "stop") 
         {
-          std::cout << "stop" << std::endl;
           break;
         }
     } 
