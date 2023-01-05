@@ -15,18 +15,18 @@ class Server
 public:
   void start()
   {
-    std::string command = "./Prog ";
-    boost::thread parser(&Server::parseProg, this);
-    boost::process::child c(command.c_str(), boost::process::std_out > is);
-
-    c.detach();
-
     boost::interprocess::message_queue::remove("Message_queue");            // erase Previous Message Queue
     boost::interprocess::message_queue MQ(boost::interprocess::create_only, // create message queue
                                           "Message_queue",                  // name
                                           1,                                // max message number
                                           4                                 // max message size
     );
+
+    std::string command = "./Prog ";
+    boost::thread parser(&Server::parseProg, this);
+    boost::process::child c(command.c_str(), boost::process::std_out > is);
+    c.detach();
+    
     int received_number = 0;
     unsigned int priority;
     boost::interprocess::message_queue::size_type received_size;
