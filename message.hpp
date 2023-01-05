@@ -24,3 +24,26 @@ class info
                 ar & text;
             }
 };
+
+class infoAlt
+{
+    public:
+        infoAlt (std::string pre = "", double i = 0, std::string post = "")
+            : preText(pre), number(i), postText(post)
+        {};
+
+        std::string preText;
+        double number;
+        std::string postText;
+
+    private:
+        friend class boost::serialization::access;
+
+        template<class Archive>
+            void serialize(Archive & ar, const unsigned int version)
+            {  
+                ar & preText;
+                ar & number;
+                ar & postText;
+            }
+};

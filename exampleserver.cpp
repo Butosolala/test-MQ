@@ -48,6 +48,37 @@ void start() {
       boost::interprocess::message_queue::remove(messageQueueName.c_str());
       std::cerr << "server exception: " << e.what() << '\n';
     }
+
+    try
+    {
+      
+      boost::interprocess::message_queue mq(
+          boost::interprocess::open_only,
+          messageQueueName.c_str());//
+      boost::interprocess::message_queue::size_type recvd_size;
+      unsigned int priority;
+
+      infoAlt message;
+
+      std::stringstream iss;
+      std::string serialized_string;
+      serialized_string.resize(1000);
+      mq.receive(&serialized_string[0], 1000, recvd_size, priority);
+
+      iss << serialized_string;
+
+      boost::archive::text_iarchive ia(iss);
+
+      ia >> message;
+      std::cout << message.preText << std::endl;
+      std::cout << message.number << std::endl;
+      std::cout << message.postText << std::endl;
+    }
+    catch (boost::interprocess::interprocess_exception &e)
+    {
+      boost::interprocess::message_queue::remove(messageQueueName.c_str());
+      std::cerr << "server exception: " << e.what() << '\n';
+    }
     
   boost::interprocess::message_queue::remove(messageQueueName.c_str());
 

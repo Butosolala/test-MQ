@@ -36,7 +36,29 @@ int main(int argc, char *argv[])
 	{
 		std::cerr << "client exception: " << e.what() << '\n';
 	}
-	
+
+	try
+	{
+		boost::interprocess::message_queue mq(
+			boost::interprocess::open_only,
+			messageQueueName.c_str());
+
+		infoAlt message("PRE OK", 1.234, "POST OK");
+		std::stringstream oss;
+
+		boost::archive::text_oarchive oa(oss);
+		oa << message;
+
+		std::string serialized_string(oss.str());
+		mq.send(serialized_string.data(), serialized_string.size(), 0);
+		
+		
+	}
+
+	catch (boost::interprocess::interprocess_exception &e)
+	{
+		std::cerr << "client exception: " << e.what() << '\n';
+	}
 	printf("END test main\n");
 	return 0;
 }
