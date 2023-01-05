@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
 	printf("test main RUNNING\n");
-	sleep(3);
+	sleep(5);
 
 	boost::interprocess::message_queue MQ(boost::interprocess::open_only, // open message queue
                                         "Message_queue"// name
